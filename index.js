@@ -14,6 +14,12 @@ async function run() {
     try {
         await client.connect();
         const userCollection = client.db('foodExpress').collection('user');
+        app.get('/user', async (req, res) => {
+            const query = {};
+            const cursor = userCollection.find(query)
+            const users = await cursor.toArray();
+            res.send(users)
+        })
 
         app.post('/user', async (req, res) => {
             const newUser = req.body;
@@ -31,10 +37,6 @@ run().catch(console.dir)
 
 app.get('/', (req, res) => {
     res.send('Hello')
-})
-app.get('/user', (req, res) => {
-    res.send('user')
-    console.log('get request responsed');
 })
 
 app.listen(port, () => {
